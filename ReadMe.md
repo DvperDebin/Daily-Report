@@ -7,3 +7,5 @@
 4. 大部分是从别人的 BLOG 中收集而来 加上自己的理解
 
 5. https://github.com/Advanced-Frontend/Daily-Interview-Question 目前看到的问题来源 
+
+6. 03/18 加了一些之前工作遇到的小问题 可以拿来直接用的
