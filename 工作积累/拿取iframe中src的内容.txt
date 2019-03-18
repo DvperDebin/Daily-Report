@@ -1,0 +1,4 @@
+let iframeUrl = window.location.href;
+let equalIndex = iframeUrl.indexOf('=');
+let headerToken = iframeUrl.substring(equalIndex+1).replace(/#/,'');
+window.localStorage.setItem('headerToken',headerToken);

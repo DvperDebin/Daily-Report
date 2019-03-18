@@ -1,0 +1,23 @@
+val.Mobile.replace(/^(\d{4})\d{4}(\d+)/,"$1****$2")  // 手机中间四位换*
+
+// 取出字符串中的{内容}，并放到新数组中
+let re = /{(.*?)}/g;
+let array = [];
+let temp = [];
+while (temp = re.exec(str)) {
+array.push(temp[0])
+}
+console.log(array)
+
+
+// 去掉字符串中花括号和中括号及其内容
+
+var str = "内容内容内{sasd6576}容内容{em567}内容内容"
+var ss =  str.replace(/\{.*?\}/g,'');
+console.log(ss);
+
+// 验证手机号
+	var phoneTest = /^(13[0-9]|14[0-9]|15[0-9]|166|17[0-9]|18[0-9]|19[8|9])\d{8}$/;
+                if (phoneTest.test(phoneVal)) {
+                    isPhone = true
+                }

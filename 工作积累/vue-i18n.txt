@@ -1,0 +1,164 @@
+安装完成后:
+
+1. main.js中 引入 使用 创建实例对象，挂载
+
+import VueI18n from 'vue-i18n'
+import messages from '@/langs'  ****注意一定是messages
+
+Vue.use(VueI18n);
+const i18n = new VueI18n({
+  locale:localStorage.getItem('locale') || 'zh',
+  messages
+});
+
+
+new Vue({
+  ...
+  i18n,
+  
+})
+
+2. 创建langs 模块 index.js 以及 不同语言包，在main.js中引入，同时index.js 引入语言包并且暴露出一个对象
+import en from './config/en'
+import cn from './config/cn'
+
+export default {
+  en,
+  cn,
+}
+
+3. 写语言包
+const cn = {
+
+    routers:{
+      //系统接入
+      systemAccess:{
+          name:'系统接入管理',
+          child:{
+            list:'系统管理列表'
+          }
+      },
+      //用户合并
+      user:{
+          name:"用户合并"
+      },
+      //主数据管理
+      mainData:{
+          name:'主数据管理'
+      },
+      //系统基础信息
+      systemBasic:{
+          name:"系统基础信息"
+      },
+      // 任务平台
+      taskPlatform:{
+          name:'调度任务平台',
+          child:{
+            dispatchInfo:"调度任务信息管理"
+          }
+      },
+      //日志管理
+      logManage:{
+          name:'日志管理',
+      }
+    }
+};
+export default cn
+
+
+const en = {
+  routers:{
+    //系统接入
+    systemAccess:{
+      name:'System Access Management',
+      child:{
+        list:'System Management List'
+      }
+    },
+    //用户合并
+    user:{
+      name:"User Combine"
+    },
+    //主数据管理
+    mainData:{
+      name:'Main Data Management'
+    },
+    //系统基础信息
+    systemBasic:{
+      name:"System basic Information"
+    },
+    // 任务平台
+    taskPlatform:{
+      name:'Task dispatch platform',
+      child:{
+        dispatchInfo:"Task Dispatch info Management"
+      }
+    },
+    //日志管理
+    logManage:{
+      name:'Log Management',
+    }
+  }
+};
+
+export default en
+
+4. this.$i18n.locale="en";  切换语言方法
+
+5. vue 模板中的使用  {{$t("header.title")}}   header.title 是cn.js 或者en.js中的数据
+
+
+
+
+
+i18n + elementUI 
+
+1. 修改langs 下 index.js
+
+import cn from './config/cn'
+import en from './config/en'
+import elementEnLocale from 'element-ui/lib/locale/lang/en'
+import elementZhLocale from 'element-ui/lib/locale/lang/zh-CN'
+export default {
+  en:{
+    ...en,
+    ...elementEnLocale,
+  },
+  cn:{
+    ...cn,
+    ...elementZhLocale,
+  }
+}
+
+2.main.js 增加 
+import ElementUI from 'element-ui'，
+Vue.use(ElementUI,{
+  i18n:(key,value) => i18n.t(key,value)
+});
+
+
+
+
+ps vue中可以使用this.$i18n.locale = 'en'
+element UI 例如 confirm 中可以使用 this.$t('button.send')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

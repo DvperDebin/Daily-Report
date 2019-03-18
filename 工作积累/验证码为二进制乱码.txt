@@ -1,0 +1,28 @@
+ 1.
+export function getCaptcha(params) {
+  return fetch({
+    url
+    method: 'get',
+    responseType: 'arraybuffer',
+    params
+  }).then( res=>{
+        const  url =  'data:image/ng;base64,' + btoa(
+           new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), '')
+        );
+        return url
+     })
+}
+
+2. responseType: blob
+
+ const res = await getCaptcha();
+    
+ const reader = new FileReader();
+        
+reader.readAsDataURL(res);
+        
+reader.onload = (e) => {
+          
+this.captchaBase64 = e.target.result
+  
+}

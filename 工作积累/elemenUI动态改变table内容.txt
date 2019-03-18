@@ -1,0 +1,29 @@
+1. 比如给了elementUI 表格每条内容对象一个新属性 isTipShow=false
+2. 要动态改变这个值（比如鼠标的移入移移出时） 就要对整个table的数据（calendar_list_data）进行深度克隆并且重新赋值
+
+        showStatus(index,content){
+            this.tipShow = content;
+            let newTableData = this.$deepCloneObject(this.calendar_list_data);  // 深度克隆
+            newTableData[index].isTipShow = true;  // 改变属性的值
+            this.calendar_list_data = newTableData;  // 重新赋值
+        },
+
+
+// 深度克隆函数
+const deepCloneObject = (val, new_val) => {
+    let ret = new_val || (isObject(val) ? {} : []);
+    for (let key in val) {
+        let el = val[key];
+        if (isReference(el)) {
+            ret[key] = isObject(el) ? {} : [];
+            deepCloneObject(el, ret[key]);
+        } else {
+            ret[key] = el
+        }
+    }
+    return ret
+}
+
+    $deepCloneObject(val, new_val) {
+        return deepCloneObject(val, new_val)
+    },

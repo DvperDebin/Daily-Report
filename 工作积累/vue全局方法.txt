@@ -1,0 +1,15 @@
+const plugIn = {
+};
+plugIn.install = function (Vue) {
+  Vue.prototype.$myMethod = function () {
+    console.log('Vue 实例方法');
+  };
+
+  Vue.GlobolMethod = function () {
+    console.log('Vue 全局方法');
+  }
+};
+export default plugIn
+
+
+在main.js中import 并且use

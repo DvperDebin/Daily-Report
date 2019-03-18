@@ -1,0 +1,18 @@
+1. 原理是把整个屏幕分成了10份。
+2. 对于750 * 1334 的设计稿来说 1份就是75px
+3. 所以对于一张176 * 176的图来说 就是2.3rem * 2.3rem的宽高
+4. 基本配置
+ <meta charset="utf-8">
+ <meta content="yes" name="apple-mobile-web-app-capable">
+ <meta content="yes" name="apple-touch-fullscreen">
+ <meta content="telephone=no,email=no" name="format-detection">
+ <script src="http://g.tbcdn.cn/mtb/lib-flexible/0.3.4/??flexible_css.js,flexible.js"></script> 
+ <link rel="apple-touch-icon" href="favicon.png"> <link rel="Shortcut Icon" href="favicon.png" type="image/x-icon">
+
+5. 对于文字的处理，使用sass的mixin
+
+@mixin font-dpr($font-size){ font-size: $font-size; [data-dpr="2"] & { font-size: $font-size * 2; } [data-dpr="3"] & { font-size: $font-size * 3; } }
+
+
+
+一个屌屌的总结 https://segmentfault.com/a/1190000011586301
