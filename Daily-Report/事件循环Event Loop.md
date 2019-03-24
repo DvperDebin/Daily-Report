@@ -109,3 +109,129 @@ console.log(_name);
 
 
 *****变量对象详解***** （03/21 2019）
+当我们创建执行上下文时，JS引擎同时会声明变量和函数。
+一个执行上下文可以被分成两个生命周期 创建阶段 引用执行阶段
+
+在创建阶段 会创建作用域链  确定this指向 创建变量对象
+代码执行阶段会完成变量赋值 函数引用  执行其他代码
+
+这里着重讲一下变量对象的创建  
+1. 创建arguments 对象  
+2. 检查当前上下文的函数声明( function xx())  在变量对象中创建一个新属性 属性值是改函数在内存中的地址引用 如果函数声明的属性已经存在则会被新的覆盖
+3. 检查当前上下文的var 变量声明 如果已经有函数声明的属性 则跳过 否则 该属性的属性值为undefined
+
+让我们来抄代码
+function test() {
+    console.log(a);
+    console.log(foo());
+
+    var a = 1;
+    function foo() {
+        return 2;
+    }
+}
+
+test();
+
+
+test调用时首先创建一个 函数test的执行上下文 
+testEC = {
+	scopechain:{}，
+	VO:{},
+	this:'',
+}
+VO = {
+	arguments: 参数可以不用管,
+	foo:foo 函数的引用, // 根据规则先找函数声明 找到了 foo
+	a：undefined  // 根据规则 找声明变量 如果找到了 且没有被函数声明占用 就赋值undefined
+}
+
+执行阶段 - 变量赋值 函数引用 执行其他代码 
+VO = {
+	arguments: 参数可以不用管,
+	foo:foo 函数的引用, // 根据规则先找函数声明 找到了 foo
+	a:1  // 根据规则 找声明变量 如果找到了 且没有被函数声明占用 就赋值undefined
+	this:window,
+}
+
+还没有到 执行阶段 就已经可以看到答案了 a 会输出undefined   console.log(foo());会输出2
+
+
+
+再疯狂抄一段代码
+
+// demo2
+function test() {
+    console.log(foo);  // 创建阶段
+    console.log(bar);   // 创建阶段
+
+    var foo = 'Hello';
+    console.log(foo);   // 由于上面代码已经处理过一次foo  所以对于foo 来说已经是执行阶段了 不信这里打印bar依旧是undefined
+    var bar = function () {
+        return 'world';
+    }
+
+    function foo() {
+        return 'hello';
+    }
+}
+
+test();
+
+testEC = {
+	VO:{},
+	scopechain:{},
+	this:'',
+}
+
+创建阶段
+VO = {
+	arguments: arguments,
+	foo:foo 引用,  // 因为先找function foo 再找var foo，因为已经有了 function foo 所以 跳过 var foo
+	bar: undefined,
+}
+执行阶段 - 进行函数引用 变量赋值
+
+VO = {
+	arguments: arguments,
+	foo: 'Hello',
+	bar: bar 引用,
+	this:window,
+}
+***** 作用域 作用域链 闭包*****
+先来抄个概念 在JavaScript中，我们可以将作用域定义为一套规则,这套规则用来管理引擎如何在当前作用域以及嵌套的子作用域中根据标识符名称进行变量查找。
+作用域 和 执行上下文 很像。。。同时也有 全局作用域 函数作用域 eval作用域这个不太考虑基本没人用
+
+对于这段代码
+var a = 20;
+
+function test() {
+    var b = a + 10;
+
+    function innerTest() {
+        var c = 10;
+        return b + c;
+    }
+
+    return innerTest();
+}
+
+test();
+
+很明显用栈来描述一下执行上下文 global -> test -> innerTest
+
+对于innerTest来说 innerTestEC = {VO:{},scopechain:[innerTestVO,testVO,globalVo]} 这里注意 当前作用域和上层作用域不是包含被包含的关系
+
+***闭包是一种特殊的对象***
+
+它由两部分组成。执行上下文(代号A)，以及在该执行上下文中创建的函数（代号B）。
+
+当B执行时，如果访问了A中变量对象中的值，那么闭包就会产生。
+
+所以，通过闭包，我们可以在其他的执行上下文中，访问到函数的内部变量。
+
+******  记住 函数从哪边调都不要紧 能不能访问到还是要看函数本身所在的执行上下文
+
+这个小总结所以抄的内容都在这 https://www.jianshu.com/p/21a16d44f150 
+
+
