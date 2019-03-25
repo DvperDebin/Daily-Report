@@ -11,4 +11,4 @@
 6. 03/18 加了一些之前工作遇到的小问题 可以拿来直接用的
 
 7. 又一个 https://github.com/mqyqingfeng/Blog 可精读的来源
-   https://www.jianshu.com/u/10ae59f49b13 也可以看看
+   https://www.jianshu.com/u/10ae59f49b13 简单易懂
