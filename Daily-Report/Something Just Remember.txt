@@ -19,3 +19,26 @@
 
 10.箭头函数的this指向外层作用域，并不一定是第一层，也不一定是第二层。因为没有自身的this，所以只能根据作用域链往上层查找，
 直到找到一个绑定了this的函数作用域，并指向调用该普通函数的对象。
+
+11.  Array.isArray(obj) 调用数组的isArray方法
+     obj instanceof Array  判断对象是否是Array的实例
+     Object.prototype.toString.call(obj) ===‘[object Array]’    三种基本查看是不是数组的方法
+
+12. 给String 写一个方法 使字符串重复num遍
+  String.prototype.repeatify = function (num) {
+    let str = this.toString();
+    let finalStr = '';
+   for(var i = 0; i <num;i++){
+     finalStr+=str
+   }
+    return finalStr
+  };
+
+  console.log('abc'.repeatify(4));
+
+13. type of null  // object
+    type of NaN // number
+    NaN == NaN // false
+    NaN == undefined //false
+
+14. HTTP是一种无状态协议
