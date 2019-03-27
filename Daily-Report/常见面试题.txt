@@ -1,0 +1,20 @@
+1. 找出字符串中出现次数最多的字母和次数
+let str = 'aayuiaahjklaabnmaapltyaalkjhhhhhhhhhhhhhhhhhhhhhhhhhhhhh';
+let obj = {};
+for(let i = 0; i < str.length; i++){
+  let char = str.charAt(i);
+  if(obj[char]){
+    obj[char]++
+  }else{
+    obj[char] = 1
+  }
+}
+let tempMax = 0;
+let tempChar = '';
+for(let key in obj){
+  if(tempMax<obj[key]){
+    tempMax = obj[key];
+    tempChar = key
+  }
+}
+console.log(tempChar+':'+tempMax);

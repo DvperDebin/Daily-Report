@@ -42,3 +42,5 @@
     NaN == undefined //false
 
 14. HTTP是一种无状态协议
+
+15. 查找一个字符串中出现最多的字母 可以利用str.chartAt(num), 返回字符串中下标为num的字母
