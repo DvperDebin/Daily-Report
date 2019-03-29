@@ -18,3 +18,24 @@ for(let key in obj){
   }
 }
 console.log(tempChar+':'+tempMax);
+
+2. 写一个函数继承Math 并且重写一个random 方法 使其返回1-9任意整数
+
+  function MyMath() {}
+  MyMath.prototype = Object.create(Math);
+  var m = new MyMath();
+  m.random = function () {
+    return Math.ceil(Math.random()*9)
+  }
+  console.log(m.random());;
+
+3. 取出数组中的数相加
+  var arr = ['m', '', 1, NaN, 20, 3, '20px', 56, 18, Infinity];
+  let res = 0;
+  arr.forEach( (each) => {
+    if(typeof each == 'number' && each && isFinite(each)){
+      res+=each
+    }
+  });
+
+  console.log(res);
