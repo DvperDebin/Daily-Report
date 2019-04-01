@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+
+    /*
+    *  1. 创建地图
+    *  2. 创建食物
+    *  3. 创建蛇
+    *  4. 蛇移动，本质上是根据数组形成新的蛇删除老蛇
+    *  5. 判断蛇头和食物位置重合 重置食物 蛇加长
+        Author: Devin.Qiu  03-31 2019
+    * */
+
+
+    // 定义一个地图类
+    (function (w) {
+        //  地图需要宽度 高度 背景色
+        function CreateMap(width,height,bgColor) {
+            this.width = width;
+            this.height = height;
+            this.bgColor = bgColor
+        }
+        // 创建dom的通用函数 定义在原型中
+        CreateMap.prototype.init = function () {
+            let div = document.createElement('div');
+            div.style.width = this.width + 'px';
+            div.style.height = this.height + 'px';
+            div.style.backgroundColor = this.bgColor;
+            div.id = 'map';
+            document.body.appendChild(div);
+        };
+        w.CreateMap = CreateMap;
+     })(window);
+    // 创建食物类
+    (function (w) {
+        let foods = [];
+        //  食物需要宽度 高度 背景色
+        function CreateFood(width,height,bgColor) {
+            this.width = width;
+            this.height = height;
+            this.bgColor = bgColor;
+        }
+        // 创建食物 随机位置
+        CreateFood.prototype.init = function () {
+            clearFood();
+            let div = document.createElement('div');
+            div.style.width = this.width + 'px';
+            div.style.height = this.height + 'px';
+            div.style.backgroundColor = this.bgColor;
+            let parent = document.getElementById('map');
+            // 以地图大小 食物大小 来确定出现的位置和边界
+            let mapWidth = parent.offsetWidth;
+            let mapHeight = parent.offsetHeight;
+            let maxWidth = Math.floor(mapWidth/this.width); // 食物出现的left值 是0到maxWidth * 宽度
+            let maxHeight = Math.floor(mapHeight/this.height); // 食物出现的top值 是0到maxHeight * 高度
+            parent.style.position = 'relative';
+            div.style.position = 'absolute';
+            div.style.left = (Math.floor(Math.random() * maxWidth)) * this.width +'px';
+            div.style.top = (Math.floor(Math.random() * maxHeight)) * this.height +'px';
+            div.id = 'food';
+            parent.appendChild(div);
+            foods.push(div);
+        };
+
+        clearFood = function(){
+            let parent = document.getElementById('map');
+            if(foods && foods[0]){
+                parent.removeChild(foods[0])
+            }
+            foods = [];
+        };
+
+        w.CreateFood = CreateFood
+    })(window);
+    // 创建蛇，蛇有蛇头 和 蛇身
+    (function (w) {
+            let rememberArr = []; // 这个数组用来保存老蛇
+            function Snake(size,dir) {
+                // 蛇每一块大小都一样 长宽也一样
+                this.size = size;
+                this.dir =dir;
+                // 初始化蛇有三段 一段头 两段身子
+                this.snakeBody = [
+                    {
+                        x:2,
+                        y:0,
+                        bgColor:'red'
+                    },
+                    {
+                        x:1,
+                        y:0,
+                        bgColor:'orange'
+                    },
+                    {
+                        x:0,
+                        y:0,
+                        bgColor:'orange'
+                    },
+                ];
+            }
+         // 生成蛇
+        Snake.prototype.init = function () {
+            remove(); // 先清空再创建
+            let parent = document.getElementById('map');
+            for(let i = 0; i < this.snakeBody.length;i++){
+                let div = document.createElement('div');
+                div.style.width = this.size + 'px';
+                div.style.height = this.size + 'px';
+                div.style.backgroundColor = this.snakeBody[i].bgColor;
+                div.style.position = 'absolute';
+                div.style.left = (this.snakeBody[i].x * this.size)+'px';
+                div.style.top = (this.snakeBody[i].y * this.size)+'px';
+                div.className = 'snake';
+                parent.appendChild(div);
+                rememberArr.push(div); // 记录老蛇每一部分对应的div
+            }
+        };
+            // 删除老蛇的方法
+        function remove(){
+            let parent = document.getElementById('map');
+            for(let i = 0;i<rememberArr.length;i++){
+                parent.removeChild(rememberArr[i]);
+            }
+            rememberArr = [];
+        };
+
+        let GlobalTemp = [];
+            // 控制蛇自动移动
+        Snake.prototype.move = function(){
+            // idea1:最后一节 = 前面一节，  蛇头 + 1， 需要反向遍历
+            // idea2: 蛇头+1，后面一节 = 前面一节 -1  这里采用这个方案
+            //this.snakeBody[0].x+=1;
+            // 初始化，记录第一个 即 蛇头的x,y值
+            let temPos = {
+                x:this.snakeBody[0].x,
+                y:this.snakeBody[0].y,
+            };
+            // 创建一个 记录本次的
+            let temp = {
+                x:0,
+                y:0,
+            };
+            switch (this.dir) {
+                case 'right':
+                    this.snakeBody[0].x +=1;
+                    break;
+                case 'left':
+                    this.snakeBody[0].x -=1;
+                    break;
+                case 'top':
+                    this.snakeBody[0].y -=1;
+                    break;
+                case 'down':
+                    this.snakeBody[0].y +=1;
+            }
+               for(let i = 1; i < this.snakeBody.length;i++){
+                   temp.x = this.snakeBody[i].x;
+                   temp.y = this.snakeBody[i].y;
+                   this.snakeBody[i].x = temPos.x;
+                   this.snakeBody[i].y = temPos.y;
+                   // temPos = temp  会爆炸、、、
+                   temPos.x = temp.x;
+                   temPos.y = temp.y;
+                   // 为了增加蛇尾时 多记录了一个值
+                   GlobalTemp = temPos;
+               }
+        };
+
+        // 增加一节
+        Snake.prototype.add = function(){
+            this.snakeBody.push(
+                {
+                    ...GlobalTemp,
+                    bgColor:'orange'
+                }
+            )
+        };
+
+        w.Snake = Snake;
+    }(window));
+    // 游戏类型
+    (function (w) {
+        let _this = null;
+        function Game() {
+            this.createMap = new CreateMap(1000,800,'#ccc');
+            this.createFood = new CreateFood(20,20,'green');
+            this.snake = new Snake(20,'right');
+        }
+        Game.prototype.init = function(){
+            this.createMap.init();
+            this.createFood.init();
+            this.snake.init();
+        };
+        Game.prototype.rule = function(){
+             _this = this;
+                let timer = setInterval(()=>{
+                    this.snake.move();
+                    this.snake.init();
+
+                    // 判断Game Over 蛇头 left < 0 || > map width
+                    if(_this.snake.snakeBody[0].x < 0 || _this.snake.snakeBody[0].x >= document.getElementById('map').offsetWidth/_this.snake.size || _this.snake.snakeBody[0].y<0 || _this.snake.snakeBody[0].y>= document.getElementById('map').offsetHeight/_this.snake.size){
+                        clearInterval(timer)
+                    }
+                    // 判断蛇头和食物的位置是否重合
+                    let foodX = parseInt(document.getElementById('food').style.left)/this.createFood.width;
+                    let foodY = parseInt(document.getElementById('food').style.top)/this.createFood.height;
+                    if(_this.snake.snakeBody[0].x  == foodX && _this.snake.snakeBody[0].y == foodY){
+                        console.log('111');
+                        this.createFood.init();
+                        this.snake.add();
+                        this.snake.init();
+                    }
+                    // 自己撞自己 Game over  TODO 因为自己不能撞自己 所以 横向纵向 运动时 不能按相反方向的键
+                   for(let i = 1; i < _this.snake.snakeBody.length; i++){
+                       if(_this.snake.snakeBody[i].x == _this.snake.snakeBody[0].x && _this.snake.snakeBody[i].y == _this.snake.snakeBody[0].y){
+                           clearInterval(timer)
+                       }
+                   }
+
+                },100);
+            this.snake.move();
+            this.snake.init();
+
+            document.onkeydown = function (e) {
+                if(e.keyCode == '37'){
+                    _this.snake.dir = 'left';
+                }else if(e.keyCode == '38'){
+                    _this.snake.dir = 'top';
+                }else if(e.keyCode == '39'){
+                    _this.snake.dir = 'right';
+                }else if(e.keyCode == '40'){
+                    _this.snake.dir = 'down';
+                }
+            }
+        };
+        w.Game = Game;
+    }(window));
+    let game = new Game();
+    game.init();
+    game.rule();
+</script>
+</html>
