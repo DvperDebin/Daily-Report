@@ -217,7 +217,7 @@
                         this.snake.add();
                         this.snake.init();
                     }
-                    // 自己撞自己 Game over  TODO 因为自己不能撞自己 所以 横向纵向 运动时 不能按相反方向的键
+                    // 自己撞自己 Game over
                    for(let i = 1; i < _this.snake.snakeBody.length; i++){
                        if(_this.snake.snakeBody[i].x == _this.snake.snakeBody[0].x && _this.snake.snakeBody[i].y == _this.snake.snakeBody[0].y){
                            clearInterval(timer)
@@ -230,12 +230,16 @@
 
             document.onkeydown = function (e) {
                 if(e.keyCode == '37'){
+                    if(_this.snake.dir == 'right') return;
                     _this.snake.dir = 'left';
                 }else if(e.keyCode == '38'){
+                    if(_this.snake.dir == 'down') return;
                     _this.snake.dir = 'top';
                 }else if(e.keyCode == '39'){
+                    if(_this.snake.dir == 'left') return;
                     _this.snake.dir = 'right';
                 }else if(e.keyCode == '40'){
+                    if(_this.snake.dir == 'top') return;
                     _this.snake.dir = 'down';
                 }
             }
