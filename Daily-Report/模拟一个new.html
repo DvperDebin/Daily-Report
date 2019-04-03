@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+
+    let FN = function (data) {
+        this.data = data;
+    };
+    FN.prototype.show = function(){
+        console.log(this.data);
+    };
+
+    let fn = new FN('1');
+
+    // 可以看出new出来的实例对象 可以继承 构造函数原型上的方法 以及 构造函数中的属性
+    console.log(fn.data);
+    fn.show();
+
+    // 在此之前 先搞点别的
+
+    function test() {
+        // arguments 不是数组，是一个类数组 所以先转成数组 并且拿出arguments中的第一项
+        let arr = Array.prototype.shift.call(arguments); // [].shift.call(arguments)
+        console.log(arr);
+    }
+    test('x','y','z')   // 输出 x
+
+    // 2. 传说中的 new 一个对象 过程
+    /*
+    *  首先创建一个新的空对象
+    *  空对象的原型 继承 构造函数的显示原型 确保 可以访问到构造函数的方法
+    *  同时对象 也要确保能访问到 构造函数中的属性
+    * */
+
+    function likeNew() {
+        let obj = {};
+        let Fn = Array.prototype.shift.call(arguments); // Fn = 传进来的构造函数 默认第一个参数是传进来的构造函数
+        obj.__proto__ = Fn.prototype;
+        Fn.apply(obj,arguments);  // 改变传进来的构造函数的this执行 强行绑定到返回的这个obj中
+        return obj
+    }
+
+    // 来个测试
+
+    function Test(color) {
+        this.color = color;
+        console.log(this.color);
+    }
+    Test.prototype.showColor = function () {
+        console.log(this.color);
+    };
+    console.dir(Test);
+
+    let tests = likeNew(Test,'black');
+
+    console.dir(tests);
+
+    tests.showColor();
+
+</script>
+</html>

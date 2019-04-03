@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+<script>
+    /*
+    *  今天看了大佬分析的 JS iterator 迭代器  自己也来消化一下
+    * */
+
+    let arr = [1,2,3];
+    console.dir(arr)  // console.dir 可以显示对象的所有的属性和方法
+    //  在隐试原型中 发现一个方法  Symbol(Symbol.iterator)
+    // 调用并打印一下看看
+    let arrIterator = arr[Symbol.iterator]();
+    console.dir(arrIterator)  // 在 隐试原型中 发现了一个 新的方法 next  说明 arrIterator 应该是一个对象
+
+    // 调用一下新的next方法看看
+
+    console.log(arrIterator.next());// {value: 1, done: false}  第一个参数是当前的值  第二个值是遍历是否完成
+
+    // 抄一段JS迭代器的定义概念
+    /*
+    * JS 迭代器协议 允许 JavaScript 对象去定义或定制它们的迭代行为
+    */
+
+    // *****  for-of没法遍历对象的原因是因为 Object的隐试原型中 没有  Symbol(Symbol.iterator) 这个方法 *****
+
+    /*
+    *  刚才 看到了一个 next 方法 感觉很熟！ 后来一想 ES6有一个generator函数
+    */
+    
+    function* forOf(arr) {
+        for(let i=0; i < arr.length; i++){
+            yield arr[i];
+        }
+    }
+    let gen = forOf(arr);
+    console.log(gen.next()); //  {value: 1, done: false}
+    console.log(gen.next()); // {value: 2, done: false}
+    console.log(gen.next()); // {value: 3, done: false}
+    console.log(gen.next()); //{value: undefined, done: true}
+    //  通过generator函数 可以实例化一个迭代器出来，generator函数中的yield可以中断代码的执行，next方法会完成当前的yield 并在下一次的yield时暂停
+    //  通过上面的例子可以看出 generator函数可以帮助我们来控制异步代码的执行顺序
+</script>
+</html>

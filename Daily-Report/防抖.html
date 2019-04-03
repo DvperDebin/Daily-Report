@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #container{
+            width: 100%; height: 200px; line-height: 200px; text-align: center; color: #fff; background-color: #444; font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+</body>
+<script>
+
+    // 这是一个非常 非常 非常 详细的讲解:https://github.com/mqyqingfeng/Blog/issues/22  看不懂我的就看这个吧 例子都一样
+    //  先看看防抖吧
+    // 从一个简单的例子说起
+    let count = 1;
+    let container = document.getElementById('container');
+    function getUserAction(e) {
+        //console.log(this);
+        //console.log(e);
+        container.innerHTML = count++;
+    };
+    //container.onmousemove = getUserAction;
+
+    // 这段代码很简单 在 container 中鼠标移动一次 count就 + 1
+    // 其实对于这种简单的逻辑和操作来说没有必须要防抖  但是 如果鼠标每滑动一次 就调一次接口 那么这个性能就炸了
+
+    // 做个简单的防抖第一版, 简单来说 就是不论你怎么动 我都1s再触发事件
+    function debounce1(fun,wait){
+        return function () {
+            setTimeout( fun,wait)
+        }
+    }  // 这个版本你会发现 确实 1s之后才执行 但是 1s后执行 fun函数依旧被执行了N遍 (其实不是fun函数在1s后执行了N遍 而是 所有的N个定时器都在1s后执行 )
+    //container.onmousemove = debounce1(getUserAction,1000)
+
+   // 有一个很简单的办法来解决 只要 setTimeout 只掉一次就好
+    function debounce2(fun,wait) {
+        let timeout;
+        return function () {
+            if(timeout) clearTimeout(timeout);
+            timeout = setTimeout(fun,wait)
+        }
+    }  // 这样确实是不论滑了多少次 只掉了一次,因为每滑动1单位的距离就会掉一次debounce2 就会生成一个timeout，然后clear掉timeout，如此循环到最后导致只会留下最后一次 移动最后1个单位时产生的timeout
+    //container.onmousemove = debounce2(getUserAction,1000)
+
+    // 接下来思考到了this 指向的问题 如果单纯调用getUserAction 函数 this 会指向调用该事件的DOM元素 但是如果在debounce中调 this 会指向window(window.debounce...)
+    // 想个办法让this重新指向 DOM元素
+    function debounce3(fun,wait) {
+        let timeout;  // console.log(this); 发现这里this指向window
+        return function () {
+            console.log(this); // 这里指向 DOM 元素
+            if(timeout) clearTimeout(timeout);
+            timeout = setTimeout(()=>{
+                fun.apply(this)  // console.log(this) 指向DOM ;  利用箭头函数没有this的属性 会向上找到有this为止
+            },wait)
+        }
+    }
+    //container.onmousemove = debounce3(getUserAction,1000)
+
+    // 继续考虑下一个问题 有时候在事件的回调中 我们会使用event 事件对象 所以要把这个参数也传过来
+    function debounce4(fun,wait) {
+        let timeout;
+        return function () {
+            if(timeout) clearTimeout(timeout);
+            let args = [].slice.call(arguments); // 把arguments 类数组对象 转换成数组  其实这个 arguments 只会有一个 'Event' 表述不准确
+            timeout = setTimeout(()=>{
+                fun.apply(this,args)
+            },wait)
+        }
+    }
+    //container.onmousemove = debounce4(getUserAction,1000)
+
+    // 考虑一个需求 当用户第一次操作时 立即执行 然后不论执行多少次 都在最后一次操作1s后执行
+    // 立即执行一次 然后不管事件触发多少次都不执行 等待触发N秒后 再次触发才会执行
+    function debounce5(fun,wait,immediate=true) {
+        let timeout;
+        return function () {
+            if(timeout) clearTimeout(timeout);
+            let args = [].slice.call(arguments);
+            if(immediate){ // 是否需要立即执行
+                let callNow = !timeout; // 第一次执行 timeout 是undefined 为false，取反为true
+                timeout = setTimeout( () => {
+                    timeout = null;
+                },wait);
+                if(callNow) fun.apply(this,args)
+            }else{  // 不需要立即执行就和 debounce4 差不多
+                timeout = setTimeout( () => {
+                    fun.apply(this,args)
+                },wait)
+            }
+        }
+    }
+    container.onmousemove = debounce5(getUserAction,1000)
+    /*
+    *  对于 debounce5 的傻瓜式讲解: immediate 默认为true， 第一次调用: callNow 因为timeout为undefined，取反为true，timeout指向一个定时器，执行fun.apply(this,args)
+    *  第二次调用: timeout 因为第一次调用已经指向定时器了 清除刚才的定时器, callNow 为false ... 如此反复调用直到第N次
+    *  第N次时: 最后一次调用 定时器中在1s后将timeout重置为null，所以在第N+1 次时 timeout为null，callNow为true ...
+    *  其实说白了 就是因为几次调用中间时间差值小于 wait  所以 timeout一直没法被重置为null 然后就一直被下一次的调用clear调直到最后一次 和 最后一次+1次的时间差大于wait了，timeout被重置为null
+    */
+
+
+    /*
+    PS: 额外附赠一个小实践：
+    let timer;
+    timer = setTimeout(() => {
+        clearTimeout(timer)
+    },100);
+    setTimeout(()=>{
+        if (timer){
+            console.log(timer);  // 会打印 timer保存的是延时器或者定时器的ID 延时器定时器没了但是ID还在
+        }
+    },200)*/
+
+</script>
+</html>
