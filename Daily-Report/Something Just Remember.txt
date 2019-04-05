@@ -45,4 +45,6 @@
 
 15. 查找一个字符串中出现最多的字母 可以利用str.chartAt(num), 返回字符串中下标为num的字母
 
-16. parseInt(Infinity) // NaN 
+16. parseInt(Infinity) // NaN, 为false
+
+17.    var now = +new Date();  //  相等于 var now = new Date().getTime();

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #container{
+            width: 100%; height: 200px; line-height: 200px; text-align: center; color: #fff; background-color: #444; font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+<div id="container"></div>
+</body>
+<script>
+    let count = 1;
+    let container = document.getElementById('container');
+    function getUserAction(e) {
+        container.innerHTML = count++;
+    };
+    //container.onmousemove = getUserAction;
+
+    // 节流 简单来说就是 如果持续触发事件 每隔一段时间只执行一次
+    // 思路1  利用时间戳
+    function throttle1(fun,wait) {
+        let present = 0;
+        return function () {
+            let args = [].splice.call(arguments);
+            let now = new Date().getTime();
+            if(now - present > wait){  // 这里可以保证第一次调用必定成功
+                fun.apply(this,args);
+                present = now
+            }
+        }
+    }
+    container.onmousemove = throttle1(getUserAction,2000);
+
+    // 思路2 利用timeout, 设置一个延时器，如果已经存在延时器 那么就不执行，没有延时器，就创建一个 在指定时间之后重置timeout = null，会再次生成一个延时器，如此反复...
+    function throttle2(fn,wait){
+        let timeout;
+        return function () {
+            let args = [].slice.call(arguments);
+            if(!timeout){
+                timeout = setTimeout( () => {
+                    timeout = null;
+                    fn.apply(this,args)
+                },wait)
+            }
+        }
+    }
+
+    // 一个吊一点的需求 上来执行一次 期间不论滑动多少次都是按照每过wait秒来执行，鼠标不滑动再执行一次(一个完整的节流)
+    // 思路 判断 now 和 past的差值 和 wait 来比较，一直滑动 now-past < wait  我们还需要记录一个值 因为不是事件触发后wait秒来执行而是每过wait秒来执行
+    // 所以需要一个变量 remain 来记录 到底还需要多久执行下一次
+    /*
+    *   不懂？假如wait是2000ms， 比如说第一次立即执行不管 第二次和第一次隔了50ms 其实肉眼看不到50ms的差别，但是需求在这里应该是1950ms后执行 而不是2000ms后执行
+    *   所以 比如第三次和第二次中间隔了1500ms 所以这边就有了明显的差别 需求再这边应该是 500ms 后执行 而不是 2000ms 所以需要一个值记录下次触发的时间
+    *   怎么计算 很简单 就用第三次和第二次之间隔了1500ms 来说 第三次 - 第二次 = 1500， 应该是500ms后执行 所以是 wait-（第三次-第二次） 代码中remain 就是用来记录的变量
+    */
+    function throttle3(fun,wait) {
+        let past = 0,timeout;
+        let thro = function () {
+            let now = +new Date(),args = [].splice.call(arguments);
+            let remain =  wait - (now - past);
+            if(remain <= 0){   //remain <= 0 的情况只有在第一次 或者 两次调用时间差大于等于wait情况下出现 eg:第一次触发 如果 wait 是2000， now(当前时间戳)-pre(0) = now, 2000 - now 必定 < 0
+                if(timeout){
+                    clearTimeout(timeout);
+                    timeout = null;
+                }
+                past = now;
+                fun.apply(this,args)
+            }else if(!timeout){ // 第二次触发 假设和上次间隔只有50ms 那么 now - past = 50， wait-50 = 1950 > 0 且第一次clear掉了timeout
+                timeout = setTimeout( () => {
+                    past = +new Date();
+                    fun.apply(this,args);
+                    timeout = null;
+                },remain)
+            }
+        };
+        return thro
+    }
+    /*
+    *  为何 使用 else if(!timeout) 判断以及  timeout = null;
+    *  因为我们需要节流！ 即每wait秒只执行一次！ 如果不加 !timeout 判断 当 remain > 0 即连续触发事件N次 也就会创建N个定时器。
+    *  所以我们需要在remain时间内只创建一个延时器  只要延时器触发时把timeout 从内存中释放掉， timeout 为false，就会创建下一个延时器
+    */
+
+    container.onmousemove = throttle3(getUserAction,2000);
+</script>
+</html>

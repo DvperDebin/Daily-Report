@@ -50,6 +50,7 @@
 
     function Test(color) {
         this.color = color;
+        this.make = 'bmw'
         console.log(this.color);
     }
     Test.prototype.showColor = function () {
@@ -58,7 +59,7 @@
     console.dir(Test);
 
     let tests = likeNew(Test,'black');
-
+    tests.make='audi'; // 注意这里 如果不注掉  this.make = 'bmw' 说明已经可以访问构造函数内部的属性了
     console.dir(tests);
 
     tests.showColor();
