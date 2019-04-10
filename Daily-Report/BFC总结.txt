@@ -1,0 +1,15 @@
+1.BFC（其实属于普通流） 块级格式化上下文 - 是页面中的一套渲染规则，会形成一个封闭的空间，空间内的子元素不论怎么排列布局都不会影响BFC 外面的元素。
+ 
+2. 如何触发BFC：
+	
+	1. html根元素
+	2. position不为static和relative
+	3. display为table-cell或者inline-block
+	4. float 不为none
+	5. overflow除了visible的值
+
+3. BFC 特性
+
+	1. 外边距重叠
+	2. 清除浮动
+	3. 防止浮动元素遮住其他元素

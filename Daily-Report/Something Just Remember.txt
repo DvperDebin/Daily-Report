@@ -48,3 +48,8 @@
 16. parseInt(Infinity) // NaN, 为false
 
 17.    var now = +new Date();  //  相等于 var now = new Date().getTime();
+
+18. 图片懒加载原理就是一开始不设置 src 属性 到了需要的时候再设置
+
+19. typeof 能判断除了null以外的基本数据类型  instanceof能判断复杂数据类型，实现原理是通过原型链判断 比如 A instanceof B， 会在A的原型链上层层找 是否有 A.prototype == B.prototype,
+一直找到原型链的顶端 Object.prototype._proto_ = {}, 如果都没有返回false

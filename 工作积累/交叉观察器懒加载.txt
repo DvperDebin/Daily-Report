@@ -1,0 +1,20 @@
+function query(selector) {
+  return Array.from(document.querySelectorAll(selector));
+}
+
+var observer = new IntersectionObserver(
+  function(changes) {
+    changes.forEach(function(change) {
+      var container = change.target;
+      var content = container.querySelector('template').content;
+      container.appendChild(content);
+      observer.unobserve(container);
+    });
+  }
+);
+
+query('.lazy-loaded').forEach(function (item) {
+  observer.observe(item);
+});
+// 上面代码中，只有目标区域可见时，才会将模板内容插入真实 DOM，从而引发静态资源的加载。
+// 来源 阮一峰的blog 

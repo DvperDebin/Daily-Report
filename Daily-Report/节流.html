@@ -69,7 +69,7 @@
                 }
                 past = now;
                 fun.apply(this,args)
-            }else if(!timeout){ // 第二次触发 假设和上次间隔只有50ms 那么 now - past = 50， wait-50 = 1950 > 0 且第一次clear掉了timeout
+            }else if(!timeout){ // 第二次触发 假设和上次间隔只有50ms 那么 now - past = 50， wait-50 = 1950 > 0 
                 timeout = setTimeout( () => {
                     past = +new Date();
                     fun.apply(this,args);

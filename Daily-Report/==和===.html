@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+
+<script>
+//  == 和 === 的区别
+    // ===  判断类型和值 都相同才返回true
+     /* == 首先判断类型是否相同 如果相同 比较值
+     *     类型不同进行类型转换
+     *      判断比较是否是null 或者 undefined 如果是 返回true
+     *      判断两者类型是否是string 和 number 如果是 转换为number
+     *      判断其中一方是否为 boolean, 如果是, 将 boolean 转为 number 再进行判断
+     *      判断其中一方是否为 object 且另一方为 string、number 或者 symbol , 如果是, 将 object 转为原始类型再进行判断
+     * */
+
+    // eg: [] == ![]
+    /* ![] 为 false 转换成number 为 0
+    *  数组中如果没有数字那么转换成Number就是 NaN，有一个数字就是这个数字，数组为空就是0
+    *  所以[] 为0    0 == 0  为 true
+    */
+
+
+</script>
+</html>

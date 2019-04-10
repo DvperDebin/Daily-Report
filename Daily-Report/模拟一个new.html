@@ -26,7 +26,7 @@
 
     function test() {
         // arguments 不是数组，是一个类数组 所以先转成数组 并且拿出arguments中的第一项
-        let arr = Array.prototype.shift.call(arguments); // [].shift.call(arguments)
+        let arr = Array.prototype.shift.call(arguments); // [].shift.call(arguments) 同理
         console.log(arr);
     }
     test('x','y','z')   // 输出 x
