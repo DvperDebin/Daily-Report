@@ -39,3 +39,12 @@ console.log(tempChar+':'+tempMax);
   });
 
   console.log(res);
+
+4.var a={},
+    b={key:'b'},   
+    c={key:'c'};
+
+a[b]=123;
+a[c]=456;
+
+console.log(a[b]); // 456  因为 obj[x] 是添加一个不确定key名的属性  说白了 a[b]   a[c]  都是 [object object]

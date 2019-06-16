@@ -44,7 +44,7 @@
             if(timeout) clearTimeout(timeout);
             timeout = setTimeout(fun,wait)
         }
-    }  // 这样确实是不论滑了多少次 只掉了一次,因为每滑动1单位的距离就会掉一次debounce2 就会生成一个timeout，然后clear掉timeout，如此循环到最后导致只会留下最后一次 移动最后1个单位时产生的timeout
+    }  // 这样确实是不论滑了多少次 只call了一次,因为每滑动1单位的距离就会掉一次debounce2 就会生成一个timeout，然后clear掉timeout，如此循环到最后导致只会留下最后一次 移动最后1个单位时产生的timeout
     //container.onmousemove = debounce2(getUserAction,1000)
 
     // 接下来思考到了this 指向的问题 如果单纯调用getUserAction 函数 this 会指向调用该事件的DOM元素 但是如果在debounce中调 this 会指向window(window.debounce...)
@@ -74,7 +74,7 @@
     }
     //container.onmousemove = debounce4(getUserAction,1000)
 
-    // 考虑一个需求 当用户第一次操作时 立即执行 然后不论执行多少次 都在最后一次操作1s后执行
+    // 考虑一个需求 当用户第一次操作时 立即执行
     // 立即执行一次 然后不管事件触发多少次都不执行 等待触发N秒后 再次触发才会执行
     function debounce5(fun,wait,immediate=true) {
         let timeout;

@@ -1,0 +1,7 @@
+在没有测试环境时可以使用
+
+npm install serve -g
+
+npm run build
+
+serve dist

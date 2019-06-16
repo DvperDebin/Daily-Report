@@ -1,1 +1,3 @@
-const TreeTable = () => import('./treeTable.vue')
+const WECHATMEMBERCENTER = () => import(/* webpackPrefetch:true*/'../../views/weChatMemberCenter/weChatMemberCenter.vue')
+
+配合webpack4 魔法注释使用

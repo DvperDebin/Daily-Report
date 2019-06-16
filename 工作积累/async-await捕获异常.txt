@@ -1,0 +1,7 @@
+async function(args) {
+  try {
+    await api(args);
+  } catch (err) {
+    throw new Error('Invlid user');
+  }
+}

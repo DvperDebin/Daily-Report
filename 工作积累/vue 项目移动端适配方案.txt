@@ -1,0 +1,68 @@
+https://blog.csdn.net/weixin_34107955/article/details/88023065 
+
+首先 lib-flexible + postcss的px2rem 过度方案已经过时 
+
+现在使用如下方法了
+
+1. 下载插件
+postcss-import
+
+postcss-url
+
+autoprefixer 这个不用安装，Vue-cli 已经集成进去了
+
+postcss-aspect-ratio-mini
+
+postcss-cssnext
+
+postcss-px-to-viewport 核心
+
+cssnano
+
+cssnano-preset-advanced
+
+vue-cli3 中在 postcss.config.js中进配置
+
+
+"postcss": 
+{
+        "plugins": {
+
+            "autoprefixer": {},
+
+            "postcss-cssnext": {},// 使用下一代的css属性
+            "postcss-px-to-viewport": {
+ // 核心配置               
+		"viewportWidth": "750", //视窗的宽度，对应的是我们设计稿的宽度，一般是750
+
+                "unitPrecision": "3",//指定`px`转换为视窗单位值的小数位数（很多时候无法整除）
+
+                "viewportUnit": "vw", //指定需要转换成的视窗单位，建议使用vw
+
+                "selectorBlackList": [ //指定不转换为视窗单位的类，可以自定义，可以无限添加,建议定义一至两个通用的类名
+
+                    ".ignore",
+
+                    ".hairlines"
+
+                ],
+
+                "minPixelValue": 1, // 小于或等于`1px`不转换为视窗单位
+
+                "mediaQuery": false// 允许在媒体查询中转换`px
+`
+            },
+
+            "cssnano": { // 压缩选项
+                
+		"preset": "advanced",
+
+                "autoprefixer": false,
+
+                "postcss-zindex": false //只要启用了这个插件，z-index的值就会重置为1,一定关闭
+            
+		}
+        
+	}
+    
+},

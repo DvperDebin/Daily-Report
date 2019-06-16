@@ -26,7 +26,7 @@
         let present = 0;
         return function () {
             let args = [].splice.call(arguments);
-            let now = new Date().getTime();
+            let now = +new Date();
             if(now - present > wait){  // 这里可以保证第一次调用必定成功
                 fun.apply(this,args);
                 present = now
