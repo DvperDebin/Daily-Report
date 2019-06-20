@@ -1,0 +1,235 @@
+@import "@/assets/style/mixin.scss";
+.rotary_draw{
+  padding: 40px 0px;
+  background: url("../../../public/imgs/ring_bgc.jpg") 50% 50%;
+  background-size:cover;
+  background-attachment: fixed;
+  overflow-x: hidden;
+  .rotary{
+    margin: 0 17px;
+    .rotary_box{
+      position: relative;
+      width: 715px;
+      height: 715px;
+      overflow: hidden;
+      .ring_img_box{
+        position: absolute;
+        z-index: 99;
+        .ring_img{
+          width: 715px;
+          height: 715px;
+        }
+        .content_wrapper{
+          position: absolute;
+          top:50%;
+          left: 50%;
+          transform: translate(-50%,-50%);
+          z-index:100;
+          width: 604px;
+          height: 604px;
+          overflow: hidden;
+          border-radius: 50%;
+          .cn-wrapper{
+            width: 715px;
+            height: 715px;
+            border-radius: 50%;
+            border: 1px solid #eee;
+            position: absolute;
+            overflow: hidden;
+            top:-55px;
+            left: -55px;
+            .item_text{
+              width: 715px;
+              height: 715px;
+              line-height: 250px;
+              text-align: center;
+              position: absolute;
+              transform-origin: 50% 50%;
+              .item_span{
+                display: block;
+                text-align: center;
+                transform-origin: 50% 145%;
+              }
+            }
+            //.line{
+            //  position: absolute;
+            //  width: 1px;
+            //  height: 357px;
+            //  left: 357px;
+            //  background-color: #000;
+            //  transform-origin: 50% 100%;
+            //}
+          }
+        }
+      }
+      .pointer_img_box{
+        position: absolute;
+        top: 207px;
+        left: 50%;
+        transform: translate(-50%, 0);
+        z-index: 101;
+        .pointer_img{
+          width: 235px;
+          height: 255px;
+          transform-origin: 52% 60%;
+        }
+      }
+    }
+  }
+  .info{
+    margin-top: 45px;
+    display: flex;
+    flex-wrap: nowrap;
+    .points{
+      width: 50%;
+    }
+    .line{
+      text-align: right;
+      border-right: 1px solid #9a9a9a;
+      padding-right: 38px;
+      @include border-box;
+      .current{
+        font-size: 30px;
+        line-height: 36px;
+      }
+      .current_point{
+        font-size: 36px;
+        color: #fbb53a;
+        padding-left: 20px;
+        @include border-box
+      }
+    }
+    .right{
+      .expire{
+        padding-left: 43px;
+        font-size: 30px;
+        line-height: 36px;
+        @include border-box
+      }
+      .expire_point{
+        padding-left: 21px;
+        @include border-box;
+        font-size: 36px;
+        color: #fbb53a;
+      }
+    }
+  }
+  .prize{
+    position: relative;
+    height: 226px;
+    margin-top: 45px;
+    .prize_item{
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, 0);
+    }
+    .prize_img_box{
+      width: 573px;
+      height: 191px;
+      top: 35px;
+      border-radius: 16px;
+      overflow: hidden;
+      .prize_img{
+        width: 573px;
+        height: 191px;
+        z-index: 97;
+      }
+    }
+    .prize_set{
+      width: 386px;
+      height: 63px;
+      background-color: #fdbf2d;
+      border-radius: 32px;
+      font-size: 30px;
+      text-align: center;
+      line-height: 63px;
+      color: #fff;
+      z-index: 98;
+      overflow: hidden;
+    }
+    @keyframes moveup{
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(-100%);
+      }
+    }
+    .page {
+      position: absolute;
+      left: 316px;
+      top: 70px;
+      height: 120px;
+      overflow: hidden;
+      .prize_list{
+        z-index: 0;
+        animation: moveup 9s  linear infinite;
+        .prize_list_li{
+          line-height: 46px;
+        }
+      }
+    }
+  }
+  .frequency{
+    margin-top: 45px;
+    font-size: 28px;
+    text-align: center;
+    line-height: 0;
+    .frequency_num{
+      margin: 0 20px;
+      font-size: 36px;
+      color: #fbb53a;
+    }
+  }
+  .start_btn{
+    width: 516px;
+    height: 90px;
+    text-align: center;
+    margin: 40px auto 0;
+    font-size: 30px;
+    line-height: 90px;
+    background-image: linear-gradient(-87deg, #ffd74c 0%, #fdbf2d 100%),
+    linear-gradient(#ffd74c, #ffd74c);
+    background-blend-mode: normal, normal;
+    border-radius: 6px;
+  }
+  .mask_content{
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.5);
+    z-index: 1001;
+    .confirm_dialog{
+      z-index: 1002;
+      position: absolute;
+      width: 448px;
+      height: 230px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      padding-bottom: 0px;
+      background-color: #fff;
+      border-radius: 10px;
+      text-align: center;
+      .dialog_content{
+        margin-top: 60px;
+        margin-bottom: 40px;
+      }
+      .dialog_btns{
+        .dialog_button{
+          width: 135px;
+          height: 46px;
+          line-height: 42px;
+          border: 2px solid #fdd248;
+          border-radius: 5px;
+        }
+        .dialog_button_confirm{
+          background-color: #fdd248;
+        }
+      }
+    }
+  }
+}
+

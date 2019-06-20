@@ -1,0 +1,31 @@
+.custom_table{
+  .search_row {
+    width: 100%;
+    overflow: hidden;
+    .search{
+      float: left;
+      .el-input,.el-select{
+        width: 200px;
+        margin-right:5px;
+      }
+    }
+    .buttons{
+      float: right;
+    }
+  }
+  .main_table{
+    .inTableImg{
+      width: 100%;
+      -webkit-border-radius: 50px;
+      -moz-border-radius: 50px;
+      border-radius: 50px;
+    }
+    .btn{
+      cursor: pointer;
+      font-size: 16px;
+    }
+  }
+  .change_page{
+    margin-top: 20px;
+  }
+}
