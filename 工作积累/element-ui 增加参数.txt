@@ -1,0 +1,5 @@
+ <el-input-number v-model="gift.quantity" :min="0" @change="((val) => {changeNum(val, idx)})"></el-input-number>
+
+    changeNum (num, idx) {
+      console.log(num, idx)
+    },
