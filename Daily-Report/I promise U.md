@@ -55,4 +55,4 @@ Promise.all([getJSON(url), getJSON(url1)]).then((res)=> {
   console.log(res)
 })
 
-***Promise.race*** 和promise.all 机会一样 只有一点 ****POromise.race( [arg1,arg2,...]) 接收的数组参数中只要有一个是promise.resolve状态 就可以执行Promise.race([arg1,arg2,..]).then ()
+***Promise.race*** 和promise.all 基本一样 只有一点 ****POromise.race( [arg1,arg2,...]) 接收的数组参数中只要有一个是promise.resolve状态 就可以执行Promise.race([arg1,arg2,..]).then ()

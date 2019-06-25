@@ -1,0 +1,15 @@
+    // ²éÑ¯µ¥¸ö
+    getMaterialLinkInfo (id) {
+      let getInfoMap = new Map([
+        ['outer_link', CetAllMaterialLinkInfo],
+        ['imgs', GetMaterialImgInfo],
+        ['texts', GetTextMaterialInfo],
+        ['voice', GetAudioMaterialInfo],
+        ['video', GetVideoMaterialInfo]
+      ])
+      getInfoMap.forEach((value, key) => {
+        if (this.activate === key) {
+          this.getInfoApi(value, id)
+        }
+      })
+    },
