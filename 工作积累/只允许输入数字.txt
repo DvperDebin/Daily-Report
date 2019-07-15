@@ -1,0 +1,1 @@
+oninput = "value=value.replace(/[^\d.]/g,'')"

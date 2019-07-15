@@ -1,0 +1,19 @@
+@import "@/assets/styles/mixin.scss";
+.imgLoadWrapper{
+  #selectFile{
+    display: none;
+  }
+  .select_content{
+    width: 100px;
+    height: 100px;
+    @include border-style(all);
+    font-size: 26px;
+    text-align: center;
+    line-height: 100px;
+    cursor: pointer;
+    .cover_img{
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
